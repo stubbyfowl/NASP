@@ -47,7 +47,7 @@ def _submit_job(job_submitter, command, job_parms, waitfor_id=None, hold=False, 
         logging.debug("submit_command = %s", submit_command)
         output = subprocess.getoutput("echo \"%s\" | %s - " % (command, submit_command))
         logging.debug("output = %s" % output)
-        job_match = re.search('^(\d+)\..*$', output)
+        job_match = re.search(r'^(\d+)\..*$', output)
         if job_match:
             jobid = job_match.group(1)
         else:
@@ -72,7 +72,7 @@ def _submit_job(job_submitter, command, job_parms, waitfor_id=None, hold=False, 
         logging.debug("submit_command = %s" % submit_command)
         output = subprocess.getoutput("%s --wrap=\"%s\"" % (submit_command, command))
         logging.debug("output = %s" % output)
-        job_match = re.search('^Submitted batch job (\d+)$', output)
+        job_match = re.search(r'^Submitted batch job (\d+)$', output)
         if job_match:
             jobid = job_match.group(1)
         else:
@@ -100,7 +100,7 @@ def _submit_job(job_submitter, command, job_parms, waitfor_id=None, hold=False, 
         #output = subprocess.getoutput("echo \"%s\" | %s" % (command, submit_command))
         output = subprocess.getoutput("%s \"%s\"" % (submit_command, command))
         logging.debug("output = %s" % output)
-        job_match = re.search('^\D*(\d+)\s.*$', output)
+        job_match = re.search(r'^\D*(\d+)\s.*$', output)
         if job_match:
             jobid = job_match.group(1)
         else:
@@ -225,7 +225,7 @@ def _run_bwa(read_tuple, aligner, samtools, job_submitter, index_job_id, referen
     else:
         aligner_name = "bwa"
         # Parse read file basename
-        old_format_string = "-I" if re.search('(?:.*\/)?[^\/]+?_[12]_sequence\.txt(?:\.gz)?$', read1,
+        old_format_string = "-I" if re.search(r'(?:.*\/)?[^\/]+?_[12]_sequence\.txt(?:\.gz)?$', read1,
                                               re.IGNORECASE) else ""
         work_dir = os.path.join(output_folder, aligner_name)
         command_parts = []

@@ -68,7 +68,7 @@ def _create_file_tuple(path):
 def _find_files(path, extension):
     file_list = []
     for file in os.listdir(path):
-        is_type = re.search('(.*)(\.%s)$' % extension, file, re.IGNORECASE)
+        is_type = re.search(r'(.*)(\.%s)$' % extension, file, re.IGNORECASE)
         if is_type:
             sample_name = is_type.group(1)
             file_list.append((sample_name, os.path.join(path, file)))
@@ -99,7 +99,7 @@ def _find_executable(application):  # This method is not OS-independent. Should 
 def _find_reads(path):
     read_list = []
     for file in os.listdir(path):
-        is_read = re.search('(.*)(\.f(ast)?q(?:\.gz)?)$', file, re.IGNORECASE)
+        is_read = re.search(r'(.*)(\.f(ast)?q(?:\.gz)?)$', file, re.IGNORECASE)
         if is_read:
             sample_name = is_read.group(1)
             is_paired = re.search('^(.*)(_[R]?)([12])(.*)$', sample_name, re.IGNORECASE)

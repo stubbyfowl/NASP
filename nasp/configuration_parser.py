@@ -70,7 +70,7 @@ def _find_reads(folder, filepath):
 
     num_reads = 0
     for file in os.listdir(filepath):
-        is_read = re.search('(.*)(\.fastq(?:\.gz)?)$', file, re.IGNORECASE)
+        is_read = re.search(r'(.*)(\.fastq(?:\.gz)?)$', file, re.IGNORECASE)
         if is_read:
             sample_name = is_read.group(1)
             is_paired = re.search('^(.*)(_[R]?)([12])(.*)$', sample_name, re.IGNORECASE)
@@ -113,7 +113,7 @@ def _find_files(folder, filepath, filetype, extension):
 
     num_files = 0
     for file in os.listdir(filepath):
-        is_type = re.search('(.*)(\.%s)$' % extension, file, re.IGNORECASE)
+        is_type = re.search(r'(.*)(\.%s)$' % extension, file, re.IGNORECASE)
         if is_type:
             sample_name = is_type.group(1)
             file_node = ElementTree.SubElement(folder, filetype, {'sample': sample_name})
