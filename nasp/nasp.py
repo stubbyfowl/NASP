@@ -364,9 +364,9 @@ def _get_job_submitter():
 
 
 def _get_trimming_parameters(queue, args):
-    import pkg_resources
+    import importlib.resources
     trim_path = _get_java_path("trimmomatic*.jar")
-    adapter_file = pkg_resources.resource_filename('nasp', 'illumina_adapters_all.fasta')
+    adapter_file = str(importlib.resources.files('nasp').joinpath('illumina_adapters_all.fasta'))
     quality_string = ''
     response = input("  What adapter file are you using for trimming [%s]? " % adapter_file)
     if response:
@@ -543,11 +543,11 @@ def _get_user_input(reference, output_folder):
 
 def gonasp_path():
     import sys
-    import pkg_resources
+    import importlib.resources
     if sys.maxsize > 2**32:
-        matrix_path = pkg_resources.resource_filename('nasp', 'nasptool_linux_64')
+        matrix_path = str(importlib.resources.files('nasp').joinpath('nasptool_linux_64'))
     else:
-        matrix_path = pkg_resources.resource_filename('nasp', 'nasptool_linux_32')
+        matrix_path = str(importlib.resources.files('nasp').joinpath('nasptool_linux_32'))
     if os.path.exists(matrix_path):
         return matrix_path
     else:

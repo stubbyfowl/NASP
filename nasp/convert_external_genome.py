@@ -121,8 +121,8 @@ def main():
     #parse_delta_file(( external_nickname + ".filtered.delta" ), franken_genome, external_genome)
     #franken_genome.write_to_fasta_file(external_nickname + ".frankenfasta", "franken::")
 
-    import pkg_resources
-    nasptool_path = pkg_resources.resource_filename('nasp', 'nasptool_linux_64')
+    import importlib.resources
+    nasptool_path = str(importlib.resources.files('nasp').joinpath('nasptool_linux_64'))
     with open(external_nickname + ".frankenfasta", 'w') as handle:
         return_code = subprocess.call([nasptool_path, "frankenfasta", external_nickname + ".filtered.delta"], stdout=handle)
 

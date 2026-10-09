@@ -36,6 +36,7 @@ setup(
     },
     include_package_data=True,
     install_requires=requirements,
+    python_requires='>=3.9',
     license="Academic and Research License",
     zip_safe=False,
     keywords='nasp',
