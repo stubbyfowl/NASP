@@ -573,12 +573,10 @@ def _call_snps(aligner_output, configuration, reference):
                     if job_id:
                         snpcaller_output.append((vcf_nickname, job_id, final_file, aligner_name, name))
                 elif re.search('samtools', name, re.IGNORECASE):
-                    (vcf_nickname, job_id, final_file) = _run_samtools(nickname, bam_file, snpcaller,
-                                                                       configuration["samtools"],
-                                                                       configuration["job_submitter"], aligner_job_id,
-                                                                       reference, configuration["output_folder"])
-                    if job_id:
-                        snpcaller_output.append((vcf_nickname, job_id, final_file, aligner_name, name))
+                    # Retired: _run_samtools uses samtools/bcftools 0.1.x syntax (mpileup -uD | bcftools view -ceg)
+                    # that no packaged bcftools accepts, so it can only produce empty calls.
+                    print("The SAMtools/BCFtools SNP caller is no longer supported (use GATK or VarScan). Skipping...")
+                    logging.warning("SNP caller '%s' skipped: the SAMtools/BCFtools caller is no longer supported" % name)
                 else:
                     print("Unknown SNP caller \'%s\' found, don't know what to do. Skipping..." % name)
     return snpcaller_output

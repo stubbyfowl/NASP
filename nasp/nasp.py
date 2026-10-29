@@ -299,7 +299,7 @@ def _get_snpcallers(queue, args):
     snpcaller_list = []
     using_gatk = False
     print(
-        "\nThis pipeline currently supports four SNP callers: GATK, SolSNP, VarScan, and SAMtools, and you can provide VCF files.\nYou can choose as many options as you want.")
+        "\nThis pipeline currently supports two SNP callers: GATK and VarScan, and you can provide VCF files.\nYou can choose as many options as you want.")
     response = input("\nWould you like to run GATK [Y]? ")
     if not re.match('^[Nn]', response):
         gatk_path = _get_java_path("GenomeAnalysisTK.jar")
@@ -328,14 +328,15 @@ def _get_snpcallers(queue, args):
                                                    'queue': queue, 'args': args})
         snpcaller_list.append(varscan_settings)
         logging.info(varscan_settings)
-    response = input("\nWould you like to run SAMtools(BCFtools) [N]? ")
-    if re.match('^[Yy]', response):
-        samtools_path = _get_application_path("bcftools")
-        samtools_settings = _get_advanced_settings("SAMtools", samtools_path, "",
-                                                   {'num_cpus': '4', 'mem_requested': '10', 'walltime': '36',
-                                                    'queue': queue, 'args': args})
-        snpcaller_list.append(samtools_settings)
-        logging.info(samtools_settings)
+    # Retired: the SAMtools(BCFtools) caller uses bcftools 0.1.x syntax that no packaged bcftools accepts.
+    #response = input("\nWould you like to run SAMtools(BCFtools) [N]? ")
+    #if re.match('^[Yy]', response):
+    #    samtools_path = _get_application_path("bcftools")
+    #    samtools_settings = _get_advanced_settings("SAMtools", samtools_path, "",
+    #                                               {'num_cpus': '4', 'mem_requested': '10', 'walltime': '36',
+    #                                                'queue': queue, 'args': args})
+    #    snpcaller_list.append(samtools_settings)
+    #    logging.info(samtools_settings)
     return snpcaller_list, using_gatk
 
 
