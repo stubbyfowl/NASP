@@ -1,7 +1,7 @@
 # Changes on `fix/modernize-deps`
 
-Three small fixes that let NASP run on current Python and current samtools. No change to
-NASP's behavior or results, no Go changes, no version bump. Background: the 2026 diagnosis
+Small fixes that let NASP run on current Python and current samtools. No change to
+NASP's results, no Go changes, no version bump. Background: the 2026 diagnosis
 of the broken bioconda package (FINDINGS.md, kept outside this repo).
 
 ## 1. `pkg_resources` → `importlib.resources`
@@ -36,6 +36,16 @@ Eight regex patterns used escapes like `\.` and `\d` in plain strings. That give
 `SyntaxWarning` on Python 3.12+ and will become an error in a future Python. They are now
 `r'...'` strings. Each pattern was checked to be byte-for-byte identical before and after.
 
+## 4. SAMtools/BCFtools SNP caller retired
+
+This caller runs `samtools mpileup -uD | bcftools view -ceg`, which is samtools/bcftools 0.1.x
+syntax. Every bcftools on bioconda rejects it (`Could not parse --min-ac eg`), so it could only
+produce empty VCFs. It's now retired the same way SolSNP was:
+- it's no longer offered in the interactive prompts, which now list GATK and VarScan;
+- a config file that still names it is skipped with a clear message.
+
+`_run_samtools` is left in place for anyone who later ports it to `bcftools call`.
+
 ## How it was tested
 
 - **Full pipeline on `examples/example_1`** (BWA-mem + GATK 3.8 UnifiedGenotyper + external
@@ -54,10 +64,6 @@ Eight regex patterns used escapes like `\.` and `\d` in plain strings. That give
 
 ## Not changed (deliberately)
 
-- **SAMtools SNP caller** (`dispatcher.py`, `mpileup -uD | bcftools view -ceg`). This is
-  samtools/bcftools 0.1.x syntax and fails with every bcftools on bioconda (`Could not parse
-  --min-ac eg`). It needs a rewrite for `bcftools call`, which is a separate decision. GATK
-  and VarScan are unaffected.
 - **Go code.** `command/align`, `command/index` and `command/snpcall` don't compile and aren't
   used by `main.go`. `command/align/cmd.go` also still contains the old `samtools sort`
   form. The Go tests don't compile either. None of this affects the `nasptool` binary.
